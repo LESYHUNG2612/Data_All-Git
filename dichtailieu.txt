@@ -1,0 +1,13 @@
+[Cloning       a repository gives you a copy of that repository and configures 
+ liên kết ngầm   Kho chứa   cho  bạn  sao chép       kho chứa       chỗ chứa
+the original repository as a remote.
+     thuộc    chỗ chứa       điều khiển từ xa
+Copying a repository just gives you a copy of that repository. (Though you can of course just add the remote definition afterwards via git remote add.)
+
+Copying      a  repository copies its .git/config file, and thus its       remotes. 
+việc sao chép            bản sao của nó                và theo cách đó nó  từ xa hay ở xa
+Cloning a repository does not copy the config file, and thus the remotes are not shared. (The repository that was cloned from is set as the origin remote in the resulting clone.)]
+
+[Clone sẽ bao gồm cả copy kho chứa và thiết lập một liên kết tới kho chứa ở xa, trong khi copy thì chỉ lấy về được kho chứa mà không tự động thiết lập liên kết tới kho chứa ở xa (tất nhiên có thể làm việc này bằng tay)
+
+Copy cắt đứt mối liên hệ với bản được copy, clone vẫn xem bản được clone là bản gốc và vẫn duy trì mối liên hệ - xem thêm phần push/pull]

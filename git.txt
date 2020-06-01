@@ -1,0 +1,399 @@
+$ git status -s
+M  readme.txt --> M là tập tin đã bị thay đổi mà chưa được đánh dấu (modified)
+A  taptin1.doc -->A là tập tin đã được đánh dấu để commit (staged)
+AM  view/view1.txt -->  AM là tập tin đã staged và modified
+?? code.php --> ?? là tập tin chưa được theo dõi (untracked)
+MM test.txt -->MM là tập tin đã modified, đã staged rồi lại modifed.
+chú thích: 
+– Dòng trống hoặc bắt đầu với dấu # sẽ bị bỏ qua
+– *.a : yêu cầu Git bỏ qua tất cả các tập tin có phần mở rộng là a
+– *.[oa] : yêu cầu Git bỏ qua các tập tin có phần mở rộng là o hoặc a (a là tập tin archive, o là tập tin object, là các tập tin được sinh ra trong quá trình biên dịch mã nguồn)
+– Sử dụng dấu ! để phủ định các giá trị phía sau, ví dụ "!lib.a" nghĩa là không bỏ qua tập tin lib.a
+– Dấu * đại diện cho 0 hoặc nhiều kí tự
+– Dấu ? đại diện cho một kí tự
+– [0-9] đại diện cho một khoảng dữ liệu từ 0 tới 9
+– Bắt đầu một luật bằng dấu xuyệt (/) để tránh đệ quy
+– Kết thúc một luật bằng dấu xuyệt (/) để xác định một thư mục
+Ví dụ nội dung của một tập tin .gitignore,
+# không theo dõi tập tin có phần mở rộng là .a
+*.a
+# nhưng theo dõi tập tin lib.a, mặc dù ở luật bên trên đã bỏ qua mọi tập tin .a
+!lib.a
+# chỉ bỏ qua tập tin TODO ở thư mục hiện tại, còn ở các thư mục con thì không
+/TODO
+# bỏ qua mọi tập tin trong các thư mục có tên là build
+build/
+# bỏ qua doc/notes.txt, chứ không phải doc/server/arch.txt
+doc/*.txt
+# bỏ qua mọi tập tin .pdf trong thư mục doc/ (kể cả trong các thư mục con)
+doc/**/*.pdf
+Ngay khi tạo kho chứa, nên tạo tập tin .gitignore để tránh theo dõi những tập tin không cần thiết.
+==============================================
+========di chuyen tạo các nhánh làm việc=====
+git commit -m 'đặt tên'
+tạo nhánh trong git 
+git checkout -b iss53
+--- xem lịch sử commit trên git
+git log --oneline --decorate
+=========================
+HEAD -> iss53 chỉ tới nhánh đang làm việc
+48ebb34 (HEAD -> iss53, master) git
+====================
+kiểm tra đang ở nhánh làm việc nào
+git checkout master
+=======================
+trộn code
+về nhánh chính
+trộn với nhánh: git merge hotfix vd:git merge iss53
+--> trộn với nhánh hotfix
+======= xóa nhánh====
+git branch -d hotfix
+========cách sữa xung đột code=====
+==== xem kết quả làm việc git ====
+git log --oneline --decorate --all --graph
+============ git diff :Xem tập tin đã sữa nhưng chưa staged nội dung trong tai liệu=========
+===Git rm gỡ bỏ tập tin không theo dỏi nữa
+và xóa tập tin trong thư mục làm việc
+==Git rm -f tập tin được staged va chua commit gỡ bỏ tập tin không theo dỏi nữa
+và xóa tập tin trong thư mục làm 
+===Git rm -r gỡ bỏ tập tin không theo dỏi nữa
+và vẫn dữ tập tin trong thư mục làm việc
+====$ git rm -r thumuc/ xoa 1 thu muc
+===Ví dụ xóa tập tin khớp mới mẫu (xóa toàn bộ các tập tin có phần mở rộng là .log trong thư mục log):
+
+$ git rm log/*.log
+
+Ví dụ xóa toàn bộ các tập tin kết thúc bằng ~.
+
+$ git rm \*~
+=====Để thực hiện việc đổi tên, sử dụng lệnh git mv ten_cu ten_moi.
+Lệnh $ git mv taptin1.doc taptin2.doc tương đương với 3 lệnh sau,
+
+$ mv taptin1.doc taptin2.doc
+$ git rm taptin1.doc
+
+$ git add taptin2.doc
+==== git log xem lich su commit
+===== git log -p -2
+-p sẽ hiển thị diff của từng commit
+-2 chỉ hiển  thị 2 commit gần nhất
+======gi t log -p -2 --word-diff :để xem thông tin một cách tổng quát.
+====git log --stat:Để xem thống kê tóm tắt
+===$ git log --pretty=oneline :  hiển thị mỗi commit trên một dòng,
+===Để định dạng hiển thị từng thông tin, sử dụng tham số --pretty=format.
+Ví dụ,
+
+$ git log --pretty=format:"%h - %an, %ar : %s"
+Bảng sau là một số giá trị của tham số format,
+
+%H: mã băm commit
+%h: mã băm commit rút gọn
+%T: băm hiển thị dạng cây
+%t: băm hiển thị dạng cây rút gọn
+%P: các mã băm gốc
+%p: các mã băm gốc rút gọn
+%an: tên tác giả
+%ae: email tác giả
+%ad: ngày commit của tác giả
+%ar: thời gian đã commit của tác giả (tính đến hiện tại)
+%cn: tên người commit
+%ce: email người commit
+%cd: ngày commit
+%cr: thời gian đã commit (tính đến hiện tại)
+%s: thông điệp gửi kèm commit
+Bảng sau tổng hợp một số kiểu định dạng xuất hữu ích của git log,
+
+Tùy chọn
+Mô tả
+-p
+Hiển thị bản vá của mỗi commit
+--word-diff
+Hiển thị bản vá ở định dạng rút gọn
+--stat
+Hiển thị thống kê của các tập tin được chỉnh sửa trong mỗi commit
+--shortstat
+Hiển thị ngắn gọn thống kê của các tập tin được chỉnh sửa trong mỗi commit
+--name-only
+Hiển thị danh sách các tập tin bị thay đổi (sau thông tin commit)
+--name-status
+Hiển thị danh sách các tập tin bị ảnh hưởng như thêm/sửa/xóa thông tin
+--abbrev-commit
+Hiển thị mã băm (SHA-1) ở dạng rút gọn
+--relative-date
+Hiển thị khoảng thời gian từ lúc commit đến thời điểm hiện tại
+--graph
+Hiển thị thông tin về rẽ nhánh, trộn nhánh và các thông tin khác
+--pretty
+Hiển thị thông tin theo định dạng tùy chỉnh (oneline, full, fuller, format)
+--oneline
+Dạng rút gọn của --pretty=oneline --abbrev-commit
+=====hiển thị 3 commit mới nhất: git log -
+====Sử dụng tham số --since hoặc --until để hiển thị các commit trong một khoảng thời gian cụ thể.
+
+Ví dụ sau sẽ hiển thị các commit trong 2 ngày gần nhất (tính từ thời điểm hiện tại),
+
+$ git log --since=2.days
+
+Ví dụ sau sẽ hiển thị các commit cho tới ngày 8 tháng 3 năm 2019,
+
+$ git log --until="2019-3-8"
+-========================================
+
+Tham số
+Mô tả
+- (n)
+Hiển thị n commit mới nhất
+--since, --after
+Chỉ hiển thị các commit được thực hiện sau ngày cụ thể
+--until, --before
+Chỉ hiển thị các commit được thực hiện trước ngày cụ thể
+--author
+Hiển thị các commit theo tên tác giả
+--commiter
+Hiển thị các commit theo tên người commit
+--grep
+Hiển thị các commit dựa vào nội dung thông điệp khi commit (message)
+Ví dụ: git log --grep="ten"
+-S
+Hiển thị các commit dựa vào nội dung đã bị thay đổi (thêm/xóa) trong các tập tin
+Ví dụ: $ git log -Sword
+============================
+
+Khi cài đặt Git, sẽ có sẵn một chương trình cho phép bạn quan sát lịch sử commit một cách trực quan bằng giao diện đồ họa. Trong cửa sổ Git Bash, gõ lệnh gitk để trải nghiệm.
+=============================
+$ git commit --amend :Thay vì thực hiện một commit khác, bạn có thể commit lại để ghi đè lên commit vừa thực hiện
+==========================
+Để hiển thị địa chỉ (URL) của remote repo, sử dụng thêm tham số -v, ví dụ:
+
+$ git remote -v
+Hoặc mở tập tin config trong thư mục local repo\ .git để xem các thông tin về remote repo.
+Với một local repo, để biết kho chứa đã được cấu hình tới các máy chủ ở xa nào sử dụng lệnh $ git remote
+--==================
+git remote add [shortname] [url]
+
+Trong đó,
+
+– shortname là tên ngắn gọn bạn tự đặt để tiện tham chiếu tới url của remote repo
+
+– url chính là địa chỉ của remote repo trên Git server nào đó (ví dụ Github, Gitlab), địa chỉ này lấy từ mục clone trên giao diện web của remote repo.
+Ví dụ để xem trên langbianggitlab có gì mới hơn so với local repo của bạn, dùng lệnh sau,
+
+$ git fetch lgcgitlab
+===========================
+Để truy cập và kéo dữ liệu về, sử dụng lệnh sau,
+
+$ git fetch [remote name]
+========================
+Để truy cập và kéo dữ liệu về, sử dụng lệnh sau,
+
+$ git fetch [remote name]
+Lệnh trên sẽ truy cập vào remote repo, thực hiện so sánh local repo và remote repo, lấy về các dữ liệu trên remote repo có mà local repo chưa có. Sau lệnh này, bạn đã có các tham chiếu tới toàn bộ các nhánh của remote repo, từ đó bạn có thể thực hiện tích hợp và kiểm tra khi cần thiết.
+Nếu local repo được tạo ra bằng cách clone từ remote repo, thì Git đã ngầm gắn hai repo với nhau, khi đó tên rút gọn của remote repo sẽ là origin. Nghĩa là bạn không cần phải thực hiện lệnh $ git remote add mà có thể truy cập luôn tới remote repo và thực hiện các thao tác khác. Ví dụ, sau khi clone về, lên remote repo thêm thông tin gì đó, rồi commit, và thực hiện lệnh sau:$ git fetch origin
+Lưu ý: lệnh $ git fetch chỉ kéo dữ liệu từ remote repo về nhưng không tích hợp dữ liệu đó vào local repo. Bạn phải thực hiện lệnh tích hợp (merge) thủ công.
+
+Nếu trên local repo đã được thiết lập một nhánh để theo dõi những thay đổi từ một nhánh ở xa thì bạn có thể sử dụng lệnh $ git pull để truy cập vào nhánh ở xa, lấy về dữ liệu và tự động tích hợp vào nhánh local tương ứng. Lệnh clone đã tự động gắn nhánh master của local repo (local master branch) với nhánh master của remote repo (remote master branch).
+
+Thông thường, khi chạy lệnh $ git pull, Git sẽ lấy dữ liệu từ remote repo mà bạn đã clone về và tích hợp vào kho chứa hiện thời, nơi mà bạn đang làm việc
+---===========================
+[git push origin master
+
+Find a ref that matches master in the source repository (most likely, it would find refs/heads/master), and update the same ref (e.g. refs/heads/master) in origin repository with it. If master did not exist remotely, it would be created.]
+
+Lưu ý: lệnh này sẽ không làm việc nếu bạn thực hiện clone từ một remote repo mà bạn không có quyền ghi (write), hoặc đã có một ai khác thực hiện lệnh push dữ liệu lên remote repo tính từ thời điểm bạn clone về máy.
+
+Nếu bạn và một thành viên khác thực hiện clone về cùng lúc, nhưng thành viên kia đã push lên trước bạn, thì bạn phải thực hiện pull kho chứa ở xa về, merge vào local repo, rồi mới được phép đẩy lên. Điều này để đảm bảo tính đồng nhất thông tin.
+=======================================
+Để xem thêm các thông tin của remote repo, sử dụng lệnh sau,
+
+$ git remote show [remote repo]
+========================
+Để đổi tên (tên dạng rút gọn) một tham chiếu đến kho chứa ở xa, sử dụng lệnh sau,
+
+$ git remote rename tencu tenmoi
+
+Lệnh này cũng đồng thời thay đổi tên tham chiếu tới các nhánh tương ứng, ví dụ tên tham chiếu đang là tencu/master sẽ được đổi thành tenmoi/master.
+
+Để gỡ bỏ một tham chiếu đến kho chứa ở xa (ví dụ thay đổi server, người đó không còn cộng tác trong dự án nữa), sử dụng lệnh,
+
+$ git remote remove tenkhochua
+
+hoặc,
+
+$ git remote rm tenkhochua
+
+Lệnh này cũng đồng thời gỡ bỏ tham chiếu tới các nhánh tương ứng.
+====================
+Xem danh sách các tag
+
+Để xem danh sách các tag sử dụng lệnh $ git tag
+Thực tế, một kho chứa sẽ có rất nhiều tag, do vậy, bạn có thể lọc các tag để hiển thị bằng cách sử dụng mẫu (pattern). Ví dụ, chỉ hiển thị các tag có chuỗi bắt đầu là v1, (-l là viết tắt của --list)
+
+$ git tag -l 'v1.*'
+Xem thông tin một Tag
+
+Sử dụng lệnh $ git show [tên tag] để xem thông tin của một tag, thông tin gồm: người tag, ngày tag, thông điệp, thông tin về commit.
+Git có hai loại tag là lightweight và annotated.
+
+– lightweight:(di động gọn nhẹ) giống như một nhánh (branch) nhưng không có thay đổi, nó chỉ là một con trỏ, trỏ tới một commit
+
+– annotated:(chú thích) được lưu trữ trong cơ sở dữ liệu của Git như một đối tượng đầy đủ; nó được băm (hash); chứa tên người tag, địa chỉ email và ngày tháng; có thông điệp đi kèm; có thể được ký và xác thực bằng GNU privacy Guard (GPG).
+=-==============================
+Tag annotated
+
+Để thêm tag kiểu annotated sử dụng lệnh $ git tag với tham số -a, ví dụ,
+
+$ git tag -a v1.3 -m "phien ban 1.3"
+
+Tham số -m dùng để tạo thông điệp cho tag, nếu không sử dụng tham số -m và không có thông điệp đi kèm, lệnh trên sẽ mở cửa sổ soạn thảo để bạn nhập thông điệp.
+
+Tag lightweight
+
+Đây là cách thứ hai để tạo tag cho một commit. Để tạo tag kiểu này, Git sẽ lấy mã băm của commit và lưu vào một tập tin. Lệnh để tạo là $ git tag [tên của tag]. Lưu ý là không có thêm các tham số -a, -s, hay -m giống như khi tạo một tag annotated.
+
+Ví dụ,
+
+$ git tag v1.4-lw
+
+Khi xem thông tin của tag v1.4-lw sẽ không thấy có thông tin về người tag, ngày tag và thông điệp.
+Tag muộn
+
+Bạn có thể tạo tag cho các commit đã được thực hiện trước đó. Thử xem lịch sử commit của một kho chứa có nội dung như sau,
+
+$ git log --pretty=oneline
+Giả sử bạn quên không tag cho dự án với phiên bản là v1.4 tại commit có thông điệp là “doi ten tap tin”. Bạn vẫn có thể tạo tag tại thời điểm này bằng cách thêm mã băm (hoặc một phần mã băm) vào cuối lệnh tạo tag.
+
+Ví dụ,
+
+$ git tag -a v1.4 -m "Phien ban 1.4" 0cf8354
+
+Kiểm tra lại, sẽ thấy commit đã được tag,
+Chia sẻ tag
+
+Khi bạn thực hiện đẩy local repo lên remote repo, các tag sẽ không được gửi lên, mà bạn cần phải thực hiện thêm công việc gửi tag lên remote repo nếu muốn chia sẻ cho người khác.
+
+Để đẩy tag lên remote repo, sử dụng lệnh $ git push origin <tên tag>.
+Nếu muốn đẩy một lần tất cả các tag lên remote repo thì sử dụng thêm tham số --tags, lệnh này sẽ đẩy lên remote repo tất cả các tag mà remote repo chưa có.
+
+Ví dụ,
+
+$ git push origin --tags
+==========================
+Xóa tag
+
+Để xóa tag tại local repo, sử dụng lệnh $ git tag -d <tên tag>.
+Ví dụ,
+
+$ git tag -d v1.0
+Deleted tag 'v1.0' (was af50413)
+
+Lệnh trên chỉ xóa được tag tại local repo, muốn xóa tag tại remote repo có thể sử dụng một trong hai cách sau:
+Cách một (bản chất của cách này là đẩy một tag không có nội dung về remote repo–để ý khoảng trắng trước dấu :),
+
+$ git push <remote repo> :refs/tags/<tên tag>
+Cách hai,
+$ git push origin --delete <tên tag>
+==============================================
+Nếu muốn xem nội dung của các tập tin tại một thời điểm đặt tag, và chuyển con trỏ của Git (HEAD) về thời điểm tương ứng, sử dụng lệnh $ git checkout <tên tag>
+
+Ví dụ,
+
+$ git checkout v1.1
+Note: checking out 'v1.1'.
+Lệnh trên sẽ đặt kho chứa ở tình trạng “detached HEAD”, hiểu nôm na là tình trạng mất định hướng. Trong tình trạng “detached HEAD”, nếu bạn thực hiện thay đổi kho chứa và commit, tag vẫn giữ nguyên, nhưng commit sẽ không thuộc vào bất kỳ nhánh nào, và bạn không có cách nào để truy cập được tới commit trừ mã băm của nó. Giải pháp trong trường hợp này là tạo một nhánh mới.
+Khi đó, những thay đổi trên nhánh phienban1 (nếu được commit) sẽ làm cho nội dung của kho chứa khác đi so với thời điểm tag v1.1.
+==========================
+git  tab gợi ý cÁC LỆNH
+Alias
+
+Để gõ lệnh nhanh có thể gán cho lệnh các tên mới ngắn gọn hơn, hoặc dễ nhớ hơn. Ví dụ, thay vì phải gõ lệnh là $ git checkout, thì chỉ cần gõ là $ git co.
+-=========================Tạo nhánh mới chính là việc tạo ra một con trỏ mới, trỏ tới commit hiện tại và đặt cho con trỏ mới một cái tên. Để tạo nhánh mới sử dụng lệnh $ git branch <tên nhánh>.
+
+Ví dụ, tạo nhánh mới có tên là testing,
+
+$ git branch testing
+
+Để biết được con trỏ HEAD đang nằm trên nhánh nào? sử dụng lệnh $ git log với tham số --decorate
+
+Ví dụ, con trỏ HEAD đang trỏ tới nhánh master,
+Để chuyển qua một nhánh khác (nhánh có tồn tại), cũng có nghĩa là cho con trỏ HEAD trỏ vào nhánh khác, sử dụng lệnh $ git checkout <tên nhánh>
+
+Ví dụ, chuyển sang nhánh testing và kiểm tra bằng lệnh $ git log --decorate
+
+$ git checkout testing
+Switched to branch 'testing'
+Để ý sẽ thấy, sau khi commit, nhánh testing tiến về phía một bước, trong khi nhánh master vẫn trỏ tới commit tại thời điểm bạn thực hiện lệnh $ git checkout để chuyển nhánh.
+
+Giờ sẽ chuyển sang nhánh master,
+
+$ git checkout master
+Sau lệnh $ git checkout master, Git sẽ thực hiện hai việc: một là chuyển con trỏ HEAD quay trở lại nhánh master, hai là phục hồi (revert) các tập tin trong thư mục làm việc trở về thời điểm mà con trỏ master đang trỏ tới (phục hồi snapshot). Điều này cũng có nghĩa là các thay đổi bạn thực hiện từ thời điểm này sẽ được tách ra theo một luồng khác (so với nhánh testing), các thay đổi khi bạn thực hiện trên nhánh testing đã bị “tua lại” để bạn có thể phát triển dự án theo một hướng khác.
+Chú ý: thao tác chuyển nhánh sẽ làm thay đổi các tập tin tại thư mục làm việc trong kho chứa. Nếu bạn thực hiện chuyển qua các nhánh cũ hơn, thư mục làm việc cũng được phục hồi lại trạng thái tại thời điểm mà bạn thực hiện commit cuối cùng trên nhánh. Nếu Git không thực hiện được việc phục hồi lại trạng thái các tập tin này, cũng có nghĩa là việc chuyển nhánh sẽ không được thực hiện.
+
+Giờ sẽ tạo một số thay đổi trong các tập tin và commit thêm một lần nữa,
+
+$ git add *
+Bây giờ lịch sử của dự án đã được tách ra thành hai nhánh riêng biệt là master và testing.
+Tới thời điểm này, bạn đã thực hiện việc tạo và chuyển sang một nhánh mới (testing), thực hiện thay đổi trên dự án, commit, rồi sau đó chuyển ngược lại nhánh chính (master), cũng thực hiện thay đổi và commit trên nhánh master. Sự thay đổi trên tập tin và commit đều được thực hiện một cách biệt lập trên hai nhánh riêng biệt. Trong quá trình làm việc, bạn có thể di chuyển qua lại giữa các nhánh để làm việc và tích hợp các nhánh lại khi cần thiết.
+
+Có thể sử dụng lệnh $ git log --oneline --decorate --graph --all để xem lịch sử các commit, các nhánh và lịch sử chia nhánh.
+===================================
+tạo nhánh mới có tên là testing,
+
+$ git branch testing
+Để biết được con trỏ HEAD đang nằm trên nhánh nào? sử dụng lệnh $ git log với tham số --decorate
+Ví dụ, chuyển sang nhánh testing và kiểm tra bằng lệnh $ git log --decorate
+
+$ git checkout testing
+Switched to branch 'testing'
+Để vừa tạo và chuyển sang nhánh mới, sử dụng lệnh $ git checkout kèm theo tham số -b.
+
+Ví dụ,
+
+$ git checkout -b iss53
+Switched to a new branch 'iss53'
+
+Lệnh trên là gộp của hai lệnh sau:
+
+$ git branch iss53
+$ git checkout iss53Xem kết quả,
+
+$ git log --oneline --decorate
+47ed23e (HEAD -> iss53, master) thay doi tren master branch
+a89362e (tag: v1.4-lw, tag: v1.3, tag: v1.2, tag: v1.1, origin/master, origin/HEAD, phienban1) Update testdesktop.txt
+Đang làm công việc có số hiệu #53 thì bạn nhận được thông báo là một chức năng của website đã làm trước đó có lỗi, bạn cần phải sửa lỗi ngay. Nhờ có Git, bạn sẽ không phải sửa lỗi trực tiếp trên phần việc đang làm dở dang tại nhánh iss53, bạn cũng không phải khôi phục lại trạng thái của dự án tại thời điểm trước khi thực hiện công việc #53. Việc đơn giản bạn cần làm lúc này là chuyển về nhánh master.
+
+Tuy nhiên, trước khi bạn chuyển nhánh, cần lưu ý là nếu khu vực làm việc và khu vực stage có chứa các thay đổi chưa được commit, nếu nó có xung đột (conflict) với nhánh sẽ chuyển qua (nhánh mới), thì Git sẽ không cho phép chuyển nhánh. Vì vậy, tốt nhất là thực hiện commit các thay đổi trên nhánh cũ rồi mới chuyển nhánh (cũng có thể thực hiện commit amend hoặc stash-sẽ tìm hiểu sau).
+
+Giả sử bạn đã commit hết các thay đổi trên iss53 và sẵn sàng chuyển về nhánh master.
+
+$ git checkout master
+Switched to branch 'master'
+
+Lúc này, thư mục làm việc (số tập tin, nội dung các tập tin) của bạn sẽ ở trạng thái giống như khi bạn chưa thực hiện công việc #53. Thực tế Git đã tự động tham chiếu tới snapshop tương ứng với commit cuối cùng trên nhánh master, để thêm/xóa/sửa các tập tin trong thư mục làm việc, sao cho giống với trạng thái của commit cuối cùng. Việc của bạn bây giờ là tập trung vào sửa lỗi.
+Công việc tiếp theo cần làm là, bạn sẽ tạo nhánh mới có tên là hotfix, thực hiện việc sửa lỗi trên nhánh hotfix cho tới khi hoàn thành công việc.
+
+$ git checkout -b hotfix
+Switched to a new branch 'hotfix'
+Sau khi kiểm tra kĩ, để đảm bảo lỗi đã được sửa, bạn cần phải tích hợp nhánh hotfix vào lại nhánh master. Mục đích là cập nhật lại website đang hoạt động, nhằm khắc phục lỗi vừa xuất hiện. Để tích hợp (merge) vào nhánh master (nhánh chính), bạn cần phải chuyển sang “nhánh chính” và sử dụng lệnh $ git merge <tên nhánh phụ>.
+
+Ví dụ,
+
+$ git checkout master
+Switched to branch 'master'
+
+$ git merge hotfix
+Nếu để ý, trong kết quả của lệnh $ git merge có dòng chữ “fast-forward”. Chữ fast-forward nghĩa là “tua nhanh”, hiểu nôm na là tiến nhanh về phía trước. Tại sao lại có chữ này ở đây? Quan sát ở hình minh họa phía trên sẽ thấy: nhánh master đang trỏ tới commit C2, hotfix đang trỏ tới commit C4, mà C4 lại là commit kế tiếp của C2. Như vậy, thực sự ở đây không có sự “tích hợp” nào hết, mà Git chỉ đơn giản di chuyển con trỏ của nhánh master tiến về phía trước. Kết quả là cả hai nhánh master và hotfix đểu trỏ tới commit C4. Fast-forward nghĩa là  “tích hợp mà như không tích hợp”.
+
+Vậy là việc sửa lỗi đã hoàn thành, con trỏ trong nhánh master đang trỏ tới commit mới nhất, và website đã sẵn sàng cho người dùng sử dụng.
+
+Sửa lỗi xong, bạn đã có thể quay lại công việc dở dang khi trước. Nhánh hotfix bây giờ không cần thiết nữa, nhánh master đang chứa tất cả các commit của hotfix rồi, vì vậy bạn có thể xóa hotfix đi (nhắc lại: nhánh chỉ là một tập tin chứa 40 kí tự, đó là giá trị SHA-1 của commit mà nhánh đó trỏ tới).
+
+Để xóa một nhánh, sử dụng lệnh $ git branch với tham số -d.
+
+Ví dụ,
+
+$ git branch -d hotfix
+Deleted branch hotfix (was e31a627).
+
+Bạn quay lại nhánh iss53 để làm việc, thực hiện commit.
+Để ý là công việc bạn đã thực hiện trong nhánh hotfix sẽ không có trong nhánh iss53. Muốn tích hợp công việc mà bạn đã thực hiện trên nhánh hotfix vào nhánh iss5, có hai cách: một là đứng tại nhánh iss53, tích hợp nhánh master vào; hai là chờ tới khi bạn quyết định trộn nhánh iss53 vào nhánh master.

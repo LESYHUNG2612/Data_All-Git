@@ -1,0 +1,40 @@
+mua tên miền mắt Bảo, tenten,....
+ten website
+website
+--backend
+-- images
+-- front-end
+--css
+--js
+--html
+index.html
+ => web = world wide web= không gian thông tin toàn cầu
+scheme giao thức
+schema lược đồ
+giao thức
+ https:
+ http
+ file
+phần mềm websever giả lập trên máy  cục bộ
+xamp: windows, apache,mysql,php
+wamp: linux,apache,mysql,php
+lamp 
+wimp
+-- Xampp để dựng một web server cục bộ
+-- đóng vai trò là mot DNS server chịu trách nhiệm phân giait tên miền cho web server
+  
+----- git 
+tạo Kho chứa
+mở thư mục đang làm việc, mở git bath gõ:
+Git init
+git statur xem trang thai
+git commit 
+git push
+git clone tải kho chứa về máy
+git ignore bỏ qua
+-----$ git clone https://github.com/legiacong/langbiang.git newlangbiang
+Đổi tên lại  thành newlangbiang
+----==============================
+url: UNIFORM RESOURE LOCATOR
+uri: UNIFORM RESOURE IDENTIFIER
+tab predicate thẻ lỗ thời
